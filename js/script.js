@@ -6,29 +6,32 @@
 
 "use strict"
 
-/**
- * This function gets the Cat fact.
- * The "async" is there because it will take time for the internet to return the value
- */
-async function getCatFact() {
-  // the "try" id here because the internet may not be working
-  // it is like an "if ... else" statement"
+const weather2 = async (URLAddress) => {
   try {
-    const resultJSON = await fetch("https://cat-fact.herokuapp.com/facts")
-    const jsonData = await resultJSON.json()
-    //console.log(jsonData)
+    const request = await fetch(URLAddress)
+    const jsonData = await request.json()
+    let tempature1 = jsonData.main.temp
+    let tempature2 = 0
+    const feeling = jsonData.weather[0]
+    const image = feeling.icon
+    tempature2 = tempature1 - 273.15
 
-    // NOTE: there are 5 (0 to 4) cat facts
-    const randomFactNumber = Math.floor(Math.random() * 5)
-    const firstDataSet = jsonData[randomFactNumber]
-    const textDataSet = firstDataSet.text
-    console.log(textDataSet)
 
-    // output
-    // add 1 to random number, since users would see Fact #0 as odd!
-    document.getElementById("cat-fact-number").innerHTML = "<p>Cat Fact #" + (randomFactNumber + 1) + "</p>"
-    document.getElementById("cat-fact").innerHTML = "<p>" + textDataSet + "</p>"
-  } catch (error) {
-    console.error(error)
+    console.log(jsonData.weather)
+    document.getElementById("theImage").innerHTML =
+      "<img src='https://openweathermap.org/img/wn/" +
+      image +
+      "@2x.png' alt='Icon' width='10%'><br><h5>"
+      ; (">")
+
+
+    document.getElementById("theTemp").innerHTML =
+      "The temperature outside is " + tempature2.toFixed(2) + " °C!"
+  } catch (err) {
+    console.log(err)
   }
 }
+
+weather2(
+  "https://api.openweathermap.org/data/2.5/weather?lat=45.4211435&lon=-75.6900574&appid=fe1d80e1e103cff8c6afd190cad23fa5"
+)
